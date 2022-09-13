@@ -24,7 +24,7 @@ export default function Home() {
       <div className='Cardsswapper'>
         < div className='Card'>
           <div className='CardImg'>
-            {/* <Image layout = "fill" src ={"https://th.bing.com/th/id/OIP.0Zpp9TcUcM7bD7q_qHmI1QHaLE?pid=ImgDet&rs=1"}/> */}
+            {/* <Image layout = "fill" src ={"/https://th.bing.com/th/id/OIP.0Zpp9TcUcM7bD7q_qHmI1QHaLE?pid=ImgDet&rs=1"}/> */}
           </div>
           < div className="Title">
             Treatment for my dog

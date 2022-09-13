@@ -4,7 +4,7 @@ export default function ContractBal() {
       <>
       {/* <Mainc> */}
       <h1>
-      This is the Contract Balance page
+      This is the Contract Balance page        
       </h1>
       {/* </Mainc> */}
       </>

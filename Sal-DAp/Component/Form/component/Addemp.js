@@ -5,8 +5,26 @@ import { toast } from "react-toastify";
 import { TailSpin } from "react-loader-spinner";
 import {create as IPFSHTTPClient} from "ipfs-http-client";
 
-const client = IPFSHTTPClient("https://ipfs.infura.io:5001/api/v0");
+// const client = IPFSHTTPClient("https://ipfs.infura.io:5001/api/v0");
+const projectId = '2EFZSrxXvWgXDpOsDrr4cQosKcl';
+const ProjectSecret = 'b84c6cb2eec9c4536a0b6424ca709f9d';
 
+
+const auth = 'Basic ' + Buffer.from(projectId +  ":" + ProjectSecret).toString('base64')
+
+const client = IPFSHTTPClient({
+    host: 'ipfs.infura.io',
+    port: 5001,
+    protocol: 'https',
+    // apiPath:'/api/v0/',
+    headers: {
+        authorization: auth,
+    }
+});
+  client.add("Hello World").then((res) => {
+
+  console.log(res);
+});
 export default function AddEmpForm() {
 
   const Handler = useContext(Formstate);
@@ -17,14 +35,14 @@ export default function AddEmpForm() {
     e.preventDefault();
     setuploading(true);
     // if(Handler.form.)
-    if(Handler.Image!==null){
+    if(Handler.Image!=null){
       try{
         console.log("11111111");
         console.log(Handler.Image);
-        const added = await client.add(Handler.Image);
+        const added = await client.add(JSON.stringify(Handler.Image));
         console.log(added);
-        
-        Handler.setImageurl(added.path);
+
+        await Handler.setImageurl(added.path);
       }
       catch(error){
         toast.warn("Error uploading image");
@@ -74,12 +92,12 @@ export default function AddEmpForm() {
               <div className="arrow"></div>
             </div>
             <div className="inpiut-name">
-             <label className = "name1">select image</label> 
+             <label className = "name1">select image</label>
              <input  onChange={Handler?.ImageHandler}  type ="file" accept="image/*" className="name2"/>
             </div>
             <div className="inpiut-name">
               {Uploading == true ?<button className="button"><TailSpin color="#fff" height={20}/></button> :uploaded == false?
-              <button onClick={uploadfiles} className="button">Upload to IPFS</button> :<button style = {{cursor:"no-drop"}} className="button">Files uploaded sucessfully</button> } 
+              <button onClick={uploadfiles} className="button">Upload to IPFS</button> :<button style = {{cursor:"no-drop"}} className="button">Files uploaded sucessfully</button> }
             </div>
             <div className="inpiut-name">
               <button  className="button" onClick={Handler?.Addemp}>ADD EMPLOYEE</button>
@@ -87,8 +105,6 @@ export default function AddEmpForm() {
           </form>
         </div>
       </div>
-      </> 
+      </>
     )
   }
- 
-  
