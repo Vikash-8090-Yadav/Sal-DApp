@@ -94,7 +94,7 @@ export async function getStaticProps(){
   const getInternData = contract.filters.salcreated(null,null,null,null,null,null,'Intern');
   const Intern = await contract.queryFilter(getInternData);
 
-  const internData = intern.map((e)=>{
+  const internData = Intern.map((e)=>{
     return{
       FirstName : e.args.FirstName,
       LastName : e.args.LastName,
