@@ -1,4 +1,3 @@
-
 import styled from 'styled-components';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
@@ -9,44 +8,144 @@ import { ethers } from 'ethers';
 import { useState } from 'react';
 import Link from 'next/link'
 import { Button } from '@mui/material';
+import allemp from "../../artifacts/contracts/Sal.sol/allemp.json"
 
-export default function Home() {
+export default function Home({
+      AllData,
+      internData,
+      HRData,
+      SDEData,
+      WebData
+    }){
+      const[filter , setFilter] = useState(AllData);
+      console.log("data",filter);
   return (
     <div>
     <div className = "HomeWrapper">
-      <div className ="FilterWrapper">
+      <div className= "FilterWrapper" >
         <div className="Filteraction" style ={{fontSize:40}}/>
-        <div className='Category'>Intern</div>
-        <div className='Category'>H.R</div>
-        <div className='Category'>Web Developer</div>
-        <div className='Category'>S.D.E</div>
+        <div className='Category'  onClick={()=>setFilter(internData)} >Intern</div>
+        <div className='Category' onClick={()=>setFilter(HRData)}>H.R</div>
+        <div className='Category' onClick={()=>setFilter(WebData)}>Web Developer</div>
+        <div className='Category' onClick={()=>setFilter(SDEData)}>S.D.E</div>
       </div>
       <div className='Cardsswapper'>
-        < div className='Card'>
-          <div className='CardImg'>
-            {/* <Image layout = "fill" src ={"/https://th.bing.com/th/id/OIP.0Zpp9TcUcM7bD7q_qHmI1QHaLE?pid=ImgDet&rs=1"}/> */}
+      {filter?.map((e)=>{
+        console.log("image->",e.image);
+        return (
+          < div className='Card'>
+            <div className='CardImg'>
+              <Image layout ="fill"
+              src = {"https://ipfs.infura.io/ipfs/"+e.image}
+              />
+            </div>
+            <div className="Title">
+              {e.FirstName}
+            </div>
+            < div className='CardData'>
+              <div className = "Text">Owner<AccountBoxIcon/></div>
+              <div className = "Text">{e.owner.slice(0,6)}...{e.owner.slice(39)}<AccountBoxIcon/></div>
+            </div>
+            <div className ="CardData" >
+              <div className = "Text">Amount<AccountBoxIcon/></div>
+              <div className = "Text">100 MATIC<AccountBoxIcon/></div>
+            </div>
+            < div className= "CardData">
+              <div className = "Text"><EventIcon /></div>
+              <div className = "Text">{new Date(e.timestamp*1000).toLocaleString()}</div>
+            </div>
+            <Button>
+              ADD MORE EMPLOYEE
+            </Button>
           </div>
-          < div className="Title">
-            Treatment for my dog
-          </div>
-          < div className='CardData'>
-            <div className = "Text">Owner<AccountBoxIcon/></div>
-            <div className = "Text">0XC5C8...E27<AccountBoxIcon/></div>
-          </div>   
-          <div className ="CardData" >
-            <div className = "Text">Amount<AccountBoxIcon/></div>
-            <div className = "Text">100 MATIC<AccountBoxIcon/></div>
-          </div>
-          < div className= "CardData">
-            <div className = "Text"><EventIcon /></div>
-            <div className = "Text">2/2/2002 , 4:00:09 PM</div>
-          </div>
-          <Button>
-            ADD MORE EMPLOYEE
-          </Button>
-        </div>
+        )
+      })
+}
+
       </div>
     </div>
     </div>
+    // </div>
   )
+}
+
+export async function getStaticProps(){
+  const provider= new ethers.providers.JsonRpcProvider(
+    "https://polygon-mumbai.infura.io/v3/95688893704a4d5bac083296c3547383"
+  );
+
+  const contract = new ethers.Contract(
+    "0x16fD482Bab105A4f5Aa59a32BD19e3c0c6964A16",
+    allemp.abi,
+    provider
+  );
+
+  const getALlData = contract.filters.salcreated();
+  const All = await contract.queryFilter(getALlData);
+
+  const AllData = All.map((e)=>{
+    return{
+      FirstName : e.args.FirstName,
+      LastName : e.args.LastName,
+      owner : e.args.owner,
+      timestamp : parseInt(e.args.timestamp)
+    }
+  });
+  const getInternData = contract.filters.salcreated(null,null,null,null,null,null,'Intern');
+  const Intern = await contract.queryFilter(getInternData);
+
+  const internData = intern.map((e)=>{
+    return{
+      FirstName : e.args.FirstName,
+      LastName : e.args.LastName,
+      owner : e.args.owner,
+      timestamp : parseInt(e.args.timestamp)
+    }
+  });
+
+  const getHRData = contract.filters.salcreated(null,null,null,null,null,null,'H.R');
+  const HR = await contract.queryFilter(getHRData);
+
+  const HRData = HR.map((e)=>{
+    return{
+      FirstName : e.args.FirstName,
+      LastName : e.args.LastName,
+      owner : e.args.owner,
+      timestamp : parseInt(e.args.timestamp)
+    }
+  });
+  const getSDE2Data = contract.filters.salcreated(null,null,null,null,null,null,'S.D.E-2');
+  console.log("sde",geSDE2Data);
+  const SDE2 = await contract.queryFilter(getSDE2Data);
+
+  const SDEData = SDE2.map((e)=>{
+    return{
+      FirstName : e.args.FirstName,
+      LastName : e.args.LastName,
+      owner : e.args.owner,
+      timestamp : parseInt(e.args.timestamp)
+    }
+  });
+  const getwebData = contract.filters.salcreated(null,null,null,null,null,null,'Web Developer');
+  const Web = await contract.queryFilter(getwebData);
+
+  const WebData = Web.map((e)=>{
+    return{
+      FirstName : e.args.FirstName,
+      LastName : e.args.LastName,
+      owner : e.args.owner,
+      timestamp : parseInt(e.args.timestamp)
+    }
+  });
+
+  console.log(AllData);
+  return {
+    props:{
+      AllData,
+      internData,
+      HRData,
+      SDEData,
+      WebData
+    }
+  }
 }

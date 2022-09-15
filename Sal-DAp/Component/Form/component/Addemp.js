@@ -21,10 +21,10 @@ const client = IPFSHTTPClient({
         authorization: auth,
     }
 });
-  client.add("Hello World").then((res) => {
-
-  console.log(res);
-});
+//   client.add("Hello World").then((res) => {
+//
+//   console.log(res);
+// });
 export default function AddEmpForm() {
 
   const Handler = useContext(Formstate);

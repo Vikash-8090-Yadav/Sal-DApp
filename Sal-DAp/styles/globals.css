@@ -44,7 +44,7 @@ wrapperM ul li{
   top:0;
 }
 .container{
-  
+
   display: flex;
   justify-content: space-between;
   padding: 13px 5%;
@@ -85,7 +85,7 @@ wrapperM ul li{
 }
 .imp-link a img{
   width: 25px;
-  margin-right: 15px;  
+  margin-right: 15px;
 }
 .imp-link{
   border-bottom: 1px solid #ccc;
@@ -113,7 +113,7 @@ wrapperM ul li{
   align-items: center;
   justify-content: center;
   padding: 0 5px 0 5px;
-  border-radius: 10px; 
+  border-radius: 10px;
 }
 
 .bl{
@@ -126,7 +126,7 @@ wrapperM ul li{
   margin-right:5px;
 }
 .wl1{
-  border-radius: 10px; 
+  border-radius: 10px;
   font-size: small;
   height: 100%;
   display: flex;
@@ -196,4 +196,80 @@ wrapperM ul li{
   align-items: center;
   flex-direction: column;
   border-radius: 8px;
+}
+
+.HomeWrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.FilterWrapper{
+  display: flex;
+  align-items: center;
+  width: 80%;
+  margin-top: 15px;
+}
+.Category{
+  padding: 10px 15px;
+  background-color: ;
+  margin: 0px 15px;
+  border-radius: 8px;
+  font-family: 'Poppins';
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.CardsWrapper{
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 80%;
+  margin-top: 25px;
+  background-color: black;
+}
+
+.CardData{
+  display: flex;
+  justify-content: space-between;
+  margin: 2px 0px;
+  background-color: ;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.Text{
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto';
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.Title{
+  font-family: 'Roboto';
+  font-size: 18px;
+  margin: 2px 0px;
+  background-color:black;
+  padding: 5px;
+  cursor: pointer;
+  font-weight: normal;
+}
+
+.bnt{
+  padding: 8px;
+  text-align: center;
+  width: 100%;
+  background-color:#00b712 ;
+  background-image:
+      linear-gradient(180deg, #00b712 0%, #5aff15 80%);
+  border: none;
+  cursor: pointer;
+  font-family: 'Roboto';
+  text-transform: uppercase;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
 }

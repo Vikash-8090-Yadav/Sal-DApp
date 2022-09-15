@@ -4,6 +4,8 @@ import AddEmpForm from "./component/Addemp";
 import Script from "next/script";
 import { toast } from "react-toastify";
 const Formstate = createContext();
+import allemp from "../../artifacts/contracts/Sal.sol/allemp.json"
+import {ethers} from "ethers";
 
 
 export default function  Form(){
@@ -39,10 +41,13 @@ export default function  Form(){
 
   const Addemp=async (e)=>{
     e.preventDefault();
-    if(typeof window.ethereum =="undefined"){
-      console.log("PLease install the metamask");
-  }
-  let web3 = await new Web3(window.ethereum);
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send('eth_requestAccounts', []);
+    const signer = provider.getSigner();
+  //   if(typeof window.ethereum =="undefined"){
+  //     console.log("PLease install the metamask");
+  // }
+  // let web3 = await new Web3(window.ethereum);
   if(form.FirstName == ""){
     toast.warn("First Name filed is empty");
   }
@@ -60,44 +65,160 @@ export default function  Form(){
   }
   else{
     setLoading(true);
-    const contract = new web3.eth.Contract(
-      [
-        {
-          "inputs": [],
-          "name": "account",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "stateMutability": "nonpayable",
-          "type": "constructor"
-        },
-        {
-          "inputs": [],
-          "name": "owner",
-          "outputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        }
-      ],
-      "0x2795294BFe8fdc0C17b79530Ee70445AdFB47021"
+
+
+    const contract = new ethers.Contract(
+      "0x16fD482Bab105A4f5Aa59a32BD19e3c0c6964A16",
+      allemp.abi,
+      signer
     );
-    const accounts = await web3.eth.requestAccounts();
-   await contract.methods.account().send({from :"0xfbb83C2a1192dDf082d231b430052B195aCB6aED"})
-  //  await as.then(function (resp){
-  //   alert(resp);
-  //   console.log(resp);
-  //  })
-  const ac = await contract.methods.owner().call({gas:35000})
-    setAddress(ac);
+    const adde = await contract.addemp(
+       form.FirstName,
+       form.LastName,
+       form.WallletAddress,
+       form.Country,
+       imageurl,
+       form.Position
+     );
+     await adde.wait();
+     setAddress(adde.to);
+  //   const signer = web3.eth.accounts.privateKeyToAccount(
+  //     "0x85af3a27ba32f9df3bb6f3bfb9d48119417ba85ff5fddd464c54e5457e99d8f7"
+  //   );
+  //   const contract = new web3.eth.Contract(
+  //     [
+  //       {
+  //         "anonymous": false,
+  //         "inputs": [
+  //           {
+  //             "indexed": false,
+  //             "internalType": "string",
+  //             "name": "FirstName",
+  //             "type": "string"
+  //           },
+  //           {
+  //             "indexed": false,
+  //             "type": "string"
+  //             "internalType": "string",
+  //             "name": "LastName",
+  //           },
+  //           {
+  //             "indexed": true,
+  //             "internalType": "address",
+  //             "name": "owner",
+  //             "type": "address"
+  //           },
+  //           {
+  //             "indexed": false,
+  //             "internalType": "address",
+  //             "name": "salAddress",
+  //             "type": "address"
+  //           },
+  //           {
+  //             "indexed": false,
+  //             "internalType": "string",
+  //             "name": "image",
+  //             "type": "string"
+  //           },
+  //           {
+  //             "indexed": true,
+  //             "internalType": "uint256",
+  //             "name": "timestamp",
+  //             "type": "uint256"
+  //           },
+  //           {
+  //             "indexed": true,
+  //             "internalType": "string",
+  //             "name": "Posotion",
+  //             "type": "string"
+  //           }
+  //         ],
+  //         "name": "salcreated",
+  //         "type": "event"
+  //       },
+  //       {
+  //         "inputs": [
+  //           {
+  //             "internalType": "uint256",
+  //             "name": "",
+  //             "type": "uint256"
+  //           }
+  //         ],
+  //         "name": "deployedSal",
+  //         "outputs": [
+  //           {
+  //             "internalType": "address",
+  //             "name": "",
+  //             "type": "address"
+  //           }
+  //         ],
+  //         "stateMutability": "view",
+  //         "type": "function"
+  //       },
+  //       {
+  //         "inputs": [
+  //           {
+  //             "internalType": "string",
+  //             "name": "_FirstName",
+  //             "type": "string"
+  //           },
+  //           {
+  //             "internalType": "string",
+  //             "name": "_LastName",
+  //             "type": "string"
+  //           },
+  //           {
+  //             "internalType": "string",
+  //             "name": "_wallet_ddress",
+  //             "type": "string"
+  //           },
+  //           {
+  //             "internalType": "string",
+  //             "name": "_Country",
+  //             "type": "string"
+  //           },
+  //           {
+  //             "internalType": "string",
+  //             "name": "_image",
+  //             "type": "string"
+  //           },
+  //           {
+  //             "internalType": "string",
+  //             "name": "_Posotion",
+  //             "type": "string"
+  //           }
+  //         ],
+  //         "name": "addemp",
+  //         "outputs": [],
+  //         "stateMutability": "nonpayable",
+  //         "type": "function"
+  //       }
+  //     ],
+  //     "0x8765d32Ad9907e2371409a17f194e713E8f4e19a",signer
+  //   );
+  //   const accounts = await web3.eth.requestAccounts();
+  //  const adde = await contract.methods.addemp(
+  //    form.FirstName,
+  //    form.LastName,
+  //    form.WallletAddress,
+  //    form.Country,
+  //    form.imageurl,
+  //    form.Position
+  //  );
+  //  // console.log(typeof(imageurl);
+  //  // console.log(imageurl);
+  //  // const a  = await web3.eth.accounts.wallet.add(signer);
+  //  // await sleep(2000);
+  //  // console.log(adde);
+  //  // await adde.wait();
+  // //  await as.then(function (resp){
+  // //   alert(resp);
+  // //   console.log(resp);
+  // //  })
+  // // adde.wait();
+  // // const ac = await contract.methods.owner().call({gas:35000})
+  // console.log(adde);
+  //   setAddress(signer. address);
   }
 }
 
@@ -106,8 +227,8 @@ export default function  Form(){
 
   return (
     <>
-    <Script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.2.7-rc.0/web3.min.js"></Script>
-    <Script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></Script>
+    // <Script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.2.7-rc.0/web3.min.js"></Script>
+    // <Script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></Script>
     <Formstate.Provider value = {{form,setForm,Image,setImage,ImageHandler,FormHandler,setImageurl ,Addemp,setuploaded}}>
         {loading == true ?
         address == "" ?
